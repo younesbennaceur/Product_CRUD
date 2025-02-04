@@ -7,6 +7,7 @@ const app = express();
 
 await connectDB(ENV.MONGO_URI);
 
+app.use(express.json());
 app.get("/", (req, res) => {
   res.send("server is ready");
 });
