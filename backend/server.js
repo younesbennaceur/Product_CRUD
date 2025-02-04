@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
   res.send("server is ready");
 });
 
-app.get("/products", async (req, res) => {
+app.get("/api/products", async (req, res) => {
   const product = req.body;
   if (!product.name || !product.price || !product.image) {
     return res.status(404).json({
@@ -30,10 +30,28 @@ app.get("/products", async (req, res) => {
       data: newProduct,
     });
   } catch (error) {
-    console.log(`error in create product : ${error}`);
+    console.log(`error in creating product : ${error}`);
     res.status(500).json({
       success: false,
       message: "server error",
+    });
+  }
+});
+
+app.delete("/api/products/:id", async (req, res) => {
+  const { id } = req.params;
+  try{
+    await Product.findByIdAndDelete(id);
+    res.status(201).json({
+      success : true ,
+      message : "product deleted successfully"
+    })
+
+  }catch(error){
+    console.log(`error in deleting product : ${error}`);
+    res.status(404).json({
+      success: false,
+      message: "product not found",
     });
   }
 });
